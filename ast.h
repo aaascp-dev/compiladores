@@ -9,7 +9,7 @@ extern void yyerror(const char *s, ...);
 namespace AST {
 
 //Binary operations
-enum Operation { plus, minus, times, div, assign };
+enum Operation { plus, minus, times, div, assign, uminus };
 
 class Node;
 
@@ -19,7 +19,7 @@ class Node {
     public:
         virtual ~Node() {}
         virtual void printTree(){}
-        virtual int computeTree(){return 0;}
+        //virtual int computeTree(){return 0;}
 };
 
 class Integer : public Node {
@@ -27,7 +27,7 @@ class Integer : public Node {
         int value;
         Integer(int value) : value(value) {  }
         void printTree();
-        int computeTree();
+        //int computeTree();
 };
 
 class BinOp : public Node {
@@ -38,15 +38,23 @@ class BinOp : public Node {
         BinOp(Node *left, Operation op, Node *right) :
             left(left), right(right), op(op) { }
         void printTree();
-        int computeTree();
+        //int computeTree();
 };
+
+class UniOp : public Node {
+	public:
+		Operation op;
+		Node *node;
+		UniOp(Node* node, Operation op) : node(node), op(op) {}
+		void printTree();
+	};
 
 class Block : public Node {
     public:
         NodeList lines;
         Block() { }
         void printTree();
-        int computeTree();
+        //int computeTree();
 };
 
 class Variable : public Node {
@@ -55,7 +63,7 @@ class Variable : public Node {
          Node *next;
          Variable(std::string id, Node *next) : id(id), next(next) { }
          void printTree();
-         int computeTree();
+         //int computeTree();
 };
 
 }

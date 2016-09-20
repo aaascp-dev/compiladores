@@ -21,10 +21,11 @@ extern void yyerror(const char* s, ...);
 
 /* token defines our terminal symbols (tokens).
  */
-%token <integer> T_VINT
+%token <vint> T_VINT
 %token <id> T_ID
 %token T_PLUS T_MINUS T_TIMES T_DIV T_NL T_COMMA
 %token T_OPAR T_CPAR T_ASSIGN
+%token T_INT
 
 /* type defines the type of our nonterminal symbols.
  * Types should match the names used in the union.
@@ -62,18 +63,19 @@ line    : T_NL { $$ = NULL; } /*nothing here to be used */
                                 $$ = new AST::BinOp(node,AST::assign,$3); }
         ;
 
-expr    : T_INT { $$ = new AST::Integer($1); }
+expr    : T_VINT { $$ = new AST::Integer($1); }
         | T_ID { $$ = symtab.useVariable($1); }
         | expr T_PLUS expr { $$ = new AST::BinOp($1,AST::plus,$3); }
         | expr T_MINUS expr { $$ = new AST::BinOp($1,AST::minus,$3); }
-        | expr T_PLUS expr { $$ = new AST::BinOp($1,AST::times,$3); }
+        | expr T_TIMES expr { $$ = new AST::BinOp($1,AST::times,$3); }
         | expr T_DIV expr { $$ = new AST::BinOp($1,AST::div,$3); }
-        | UMINUS expr %prec UMINUS { $$ = -$2; }
+        | UMINUS expr %prec UMINUS { $$ = new AST::UniOp($2, AST::uminus); }
         | T_OPAR expr T_CPAR { $$ = $2; }
         ;
 
 varlist : T_ID { $$ = symtab.newVariable($1, NULL); }
-        | T_ID T_ASSIGN expr { $$ = symtab.newVariable($3, $1); } //TODO
+        | T_ID T_ASSIGN expr { AST::Node* node  = symtab.assignVariable($1);
+                               $$ = new AST::BinOp(node,AST::assign,$3); }
         | varlist T_COMMA T_ID { $$ = symtab.newVariable($3, $1); }
         ;
 

@@ -15,12 +15,20 @@ void BinOp::printTree(){
     left->printTree();
     switch(op){
         case plus: std::cout << " + "; break;
-        case minus: std::cout << " + "; break;
+        case minus: std::cout << " - "; break;
         case times: std::cout << " * "; break;
         case div: std::cout << " / "; break;
         case assign: std::cout << " = "; break;
     }
     right->printTree();
+    return;
+}
+
+void UniOp::printTree(){
+    switch(op){
+        case uminus: std::cout << " - "; break;
+    }
+    node->printTree();
     return;
 }
 
@@ -39,7 +47,7 @@ void Variable::printTree(){
     std::cout << id;
 }
 
-/* Compute methods */
+/* Compute methods
 int Integer::computeTree(){
     return value;
 }
@@ -72,4 +80,4 @@ int Block::computeTree(){
 int Variable::computeTree(){
     //the value of a variable is currently stored in the symbol table
     return symtab.entryList[id].value;
-}
+} */

@@ -14,11 +14,11 @@ chars [a-zA-Z]+
 %%
 
 [ \t]                         ; //ignores spaces
-{digs}                        {yylval.integer = std::atoi(yytext); return T_VINT;}
-{chars}[{chars}|{digs}|\_]*   {yylval.id = std::atoi(yytext); return T_ID;}
+{digs}                        {yylval.vint = std::atoi(yytext); return T_VINT;}
+{chars}[{chars}|{digs}|\_]*   {yylval.id = yytext; return T_ID;}
 
 
- //Operadores
+ /* Operadores */
 "+"                 {return T_PLUS;}
 "-"                 {return T_MINUS;}
 "*"                 {return T_TIMES;}
@@ -28,7 +28,7 @@ chars [a-zA-Z]+
 ")"                 {return T_CPAR;}
 "="                 {return T_ASSIGN;}
 
- //Tipos
+ /* Tipos */
 "int"               {return T_INT;}
 
 
