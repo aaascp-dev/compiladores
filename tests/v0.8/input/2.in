@@ -1,3 +1,0 @@
-float values(100)
-values(([int] values(10))+2) = - values(([int] values(12))*5)
-
